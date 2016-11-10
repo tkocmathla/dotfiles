@@ -22,18 +22,37 @@ set expandtab
 set hlsearch
 
 " Adjust behavior based on filetype
-autocmd BufNewFile,BufRead *.cljc set filetype=clojure
+autocmd BufNewFile,BufRead *.cljc,*.cljx set filetype=clojure
 autocmd FileType clojure,html set ts=2 sw=2 et
 
 " Align NERDCommenter delimiters flush left
 let g:NERDDefaultAlign = 'left'
 
+" NERDTree mappings
 nmap <c-n> :NERDTreeToggle<cr>
+
+" Fireplace mappings
 nmap <Leader>r :Require<cr>
 nmap <Leader>R :Require!<cr>
 nmap <Leader>E :%Eval<cr>
 nmap <Leader>e :Eval<cr>
 nmap <Leader>t :w<cr>:Require!<cr>:RunTests<cr>
+
+" VCSCommand mappings
+nmap <Leader>sa :VCSAdd<cr>
+nmap <Leader>sb :VCSBlame<cr>
+nmap <Leader>sc :VCSCommit<cr>
+nmap <Leader>sD :VCSDelete<cr>
+nmap <Leader>sd :VCSDiff<cr>
+nmap <Leader>sv :VCSVimDiff<cr>
+nmap <Leader>si :VCSInfo<cr>
+nmap <Leader>sl :VCSLog<cr>
+nmap <Leader>ss :VCSStatus<cr>
+nmap <Leader>su :VCSUpdate<cr>
+nmap <Leader>sRR :VCSRevert<cr>
+
+" ack/ag mappings
+nmap <Leader>a :Ack<Space>
 
 " Toggle quickfix window 
 nnoremap <leader>q :call QuickfixToggle()<cr>
