@@ -1,5 +1,10 @@
+nnoremap <Space> <nop>
+let mapleader = " "
+let maplocalleader = ","
+
 " Enable powerline-status
 set runtimepath+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
+set runtimepath+=~/.fzf
 
 " Enable pathogen
 execute pathogen#infect()
@@ -13,22 +18,47 @@ colorscheme solarized
 
 " Always show statusline
 set laststatus=2
-
-set autochdir
+     
+set hidden
+set confirm
+"set autochdir
 set number
 set tabstop=4
 set shiftwidth=4
 set expandtab
 set hlsearch
+set foldmethod=syntax
 
 " Adjust behavior based on filetype
-autocmd BufNewFile,BufRead *.cljc,*.cljx set filetype=clojure
+autocmd BufNewFile,BufRead *.clj,*.cljc,*.cljx set filetype=clojure
 autocmd FileType clojure,html set ts=2 sw=2 et
 
 " Align NERDCommenter delimiters flush left
 let g:NERDDefaultAlign = 'left'
 
-" NERDTree mappings
+" Key mappings
+nmap n nzz
+nmap p pzz
+nmap N Nzz
+nmap P Pzz
+nmap <Leader>h :noh<cr>
+nmap <Leader>p :set paste<cr>
+nmap <Leader>P :set nopaste<cr>
+nmap <Leader>* :Eval (clojure.repl/pst)<cr>
+" Copy mode: opens a copy of the buffer in the current window in a new tab and disables line numbers
+nmap <Leader>c :split<cr><C-W>T:se nonu<cr>
+" Go to tab by number
+nmap <Leader>1 1gt
+nmap <Leader>2 2gt
+nmap <Leader>3 3gt
+nmap <Leader>4 4gt
+nmap <Leader>5 5gt
+nmap <Leader>6 6gt
+nmap <Leader>7 7gt
+nmap <Leader>8 8gt
+nmap <Leader>9 9gt
+nmap <Leader>0 :tablast<cr> 
+
 nmap <c-n> :NERDTreeToggle<cr>
 
 " Fireplace mappings
@@ -36,7 +66,8 @@ nmap <Leader>r :Require<cr>
 nmap <Leader>R :Require!<cr>
 nmap <Leader>E :%Eval<cr>
 nmap <Leader>e :Eval<cr>
-nmap <Leader>t :w<cr>:Require!<cr>:RunTests<cr>
+nmap <Leader>t :.RunTests<cr>
+nmap <Leader>T :RunTests<cr>
 
 " VCSCommand mappings
 nmap <Leader>sa :VCSAdd<cr>
@@ -51,21 +82,8 @@ nmap <Leader>ss :VCSStatus<cr>
 nmap <Leader>su :VCSUpdate<cr>
 nmap <Leader>sRR :VCSRevert<cr>
 
-" ack/ag mappings
-nmap <Leader>a :Ack<Space>
-
-" Toggle quickfix window 
-nnoremap <leader>q :call QuickfixToggle()<cr>
-let g:quickfix_is_open = 0
-function! QuickfixToggle()
-    if g:quickfix_is_open
-        cclose
-        let g:quickfix_is_open = 0
-        execute g:quickfix_return_to_window . "wincmd w"
-    else
-        let g:quickfix_return_to_window = winnr()
-        copen
-        let g:quickfix_is_open = 1
-    endif
-endfunction
-
+" fzf mappings
+command! -nargs=* AgClj call fzf#vim#ag(<q-args>, '-G "\.clj[cs]?$"', {})
+nmap <Leader>ff :Files $HOME/soda<cr>
+nmap <Leader>fb :Buffers<cr>
+nmap <Leader>fg :AgClj<cr>
