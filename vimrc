@@ -1,9 +1,10 @@
 call plug#begin()
 Plug 'altercation/vim-colors-solarized'
-Plug 'powerline/powerline', {'dir': '~/.local/lib/python2.7/site-packages/powerline/bindings/vim/'}
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdcommenter'
+Plug 'vim-scripts/vcscommand.vim'
 Plug 'guns/vim-sexp', {'for': 'clojure'}
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fireplace', {'for': 'clojure'}
@@ -52,7 +53,7 @@ nmap <Leader>p :set paste<cr>
 nmap <Leader>P :set nopaste<cr>
 nmap <Leader>* :Eval (clojure.repl/pst)<cr>
 " Copy mode: opens a copy of the buffer in the current window in a new tab and disables line numbers
-nmap <Leader>c :split<cr><C-W>T:se nonu<cr>
+nmap <Leader>C :split<cr><C-W>T:se nonu<cr>
 " Go to tab by number
 nmap <Leader>1 1gt
 nmap <Leader>2 2gt
