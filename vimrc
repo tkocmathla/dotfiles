@@ -1,13 +1,20 @@
+call plug#begin()
+Plug 'altercation/vim-colors-solarized'
+Plug 'powerline/powerline', {'dir': '~/.local/lib/python2.7/site-packages/powerline/bindings/vim/'}
+Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
+Plug 'junegunn/fzf.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'guns/vim-sexp', {'for': 'clojure'}
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-fireplace', {'for': 'clojure'}
+Plug 'tpope/vim-surround', {'for': 'clojure'}
+Plug 'tpope/vim-sexp-mappings-for-regular-people', {'for': 'clojure'}
+call plug#end()
+
 nnoremap <Space> <nop>
 let mapleader = " "
 let maplocalleader = ","
 
-" Enable powerline-status
-set runtimepath+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
-set runtimepath+=~/.fzf
-
-" Enable pathogen
-execute pathogen#infect()
 filetype plugin indent on
 
 " Set up color scheme
@@ -21,7 +28,6 @@ set laststatus=2
      
 set hidden
 set confirm
-"set autochdir
 set number
 set tabstop=4
 set shiftwidth=4
@@ -84,6 +90,6 @@ nmap <Leader>sRR :VCSRevert<cr>
 
 " fzf mappings
 command! -nargs=* AgClj call fzf#vim#ag(<q-args>, '-G "\.clj[cs]?$"', {})
-nmap <Leader>ff :Files $HOME/soda<cr>
+nmap <Leader>ff :Files $HOME<cr>
 nmap <Leader>fb :Buffers<cr>
 nmap <Leader>fg :AgClj<cr>
