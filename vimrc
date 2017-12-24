@@ -12,6 +12,8 @@ Plug 'tpope/vim-surround', {'for': 'clojure'}
 Plug 'tpope/vim-sexp-mappings-for-regular-people', {'for': 'clojure'}
 call plug#end()
 
+set rtp+=~/.local/lib/python2.7/site-packages/powerline/bindings/vim
+
 nnoremap <Space> <nop>
 let mapleader = " "
 let maplocalleader = ","
