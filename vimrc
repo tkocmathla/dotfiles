@@ -1,5 +1,6 @@
 call plug#begin()
 Plug 'altercation/vim-colors-solarized'
+Plug 'milkypostman/vim-togglelist'
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
