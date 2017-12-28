@@ -5,6 +5,7 @@ Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-fugitive'
 Plug 'vim-scripts/vcscommand.vim'
 Plug 'guns/vim-sexp', {'for': 'clojure'}
 Plug 'tpope/vim-repeat'
