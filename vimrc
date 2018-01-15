@@ -1,11 +1,13 @@
 call plug#begin()
 Plug 'altercation/vim-colors-solarized'
+Plug 'tpope/vim-obsession'
 Plug 'milkypostman/vim-togglelist'
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-fugitive'
+Plug 'jgdavey/tslime.vim'
 Plug 'vim-scripts/vcscommand.vim'
 Plug 'guns/vim-sexp', {'for': 'clojure'}
 Plug 'tpope/vim-repeat'
@@ -30,7 +32,7 @@ colorscheme solarized
 
 " Always show statusline
 set laststatus=2
-     
+
 set hidden
 set confirm
 set number
@@ -39,9 +41,11 @@ set shiftwidth=4
 set expandtab
 set hlsearch
 set foldmethod=syntax
+set listchars=tab:»\ ,nbsp:␣,trail:•,extends:⟩,precedes:⟨
+set list
 
 " Adjust behavior based on filetype
-autocmd BufNewFile,BufRead *.clj,*.cljc,*.cljx set filetype=clojure
+autocmd BufNewFile,BufRead *.edn,*.clj,*.cljc,*.cljx set filetype=clojure
 autocmd FileType clojure,html set ts=2 sw=2 et
 
 " Align NERDCommenter delimiters flush left
@@ -68,7 +72,7 @@ nmap <Leader>6 6gt
 nmap <Leader>7 7gt
 nmap <Leader>8 8gt
 nmap <Leader>9 9gt
-nmap <Leader>0 :tablast<cr> 
+nmap <Leader>0 :tablast<cr>
 
 nmap <c-n> :NERDTreeToggle<cr>
 
@@ -98,3 +102,7 @@ command! -nargs=* AgClj call fzf#vim#ag(<q-args>, '-G "\.clj[cs]?$"', {})
 nmap <Leader>ff :Files $HOME<cr>
 nmap <Leader>fb :Buffers<cr>
 nmap <Leader>fg :AgClj<cr>
+
+" Send selection to tmux
+vmap <Leader>z <Plug>SendSelectionToTmux
+nmap <Leader>x <Plug>SetTmuxVars
