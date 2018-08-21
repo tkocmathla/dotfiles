@@ -1,5 +1,6 @@
 call plug#begin()
 Plug 'altercation/vim-colors-solarized'
+Plug 'jnurmine/Zenburn'
 Plug 'tpope/vim-obsession'
 Plug 'milkypostman/vim-togglelist'
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
@@ -9,7 +10,11 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-fugitive'
 Plug 'jgdavey/tslime.vim'
 Plug 'vim-scripts/vcscommand.vim'
+Plug 'vim-syntastic/syntastic'
+Plug 'Valloric/YouCompleteMe'
 Plug 'guns/vim-sexp', {'for': 'clojure'}
+Plug 'venantius/vim-cljfmt'
+Plug 'tpope/vim-db'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fireplace', {'for': 'clojure'}
 Plug 'tpope/vim-surround', {'for': 'clojure'}
@@ -41,6 +46,7 @@ set shiftwidth=4
 set expandtab
 set hlsearch
 set foldmethod=syntax
+set cursorline
 set listchars=tab:»\ ,nbsp:␣,trail:•,extends:⟩,precedes:⟨
 set list
 
@@ -83,6 +89,18 @@ nmap <Leader>E :%Eval<cr>
 nmap <Leader>e :Eval<cr>
 nmap <Leader>t :.RunTests<cr>
 nmap <Leader>T :RunTests<cr>
+nmap <Leader>b :Last<cr>
+
+" Clojure keyword to string
+" wb   - move to beginning of word
+" x    - delete colon
+" ysw" - wrap word in double quotes
+nmap <Leader>ks wbxysw"
+" Clojure string to keyword
+" ds" - delete surrounding double quotes
+" wb  - move to beginning of word
+" i:  - insert a colon
+nmap <Leader>sk ds"wbi:<esc>
 
 " VCSCommand mappings
 nmap <Leader>sa :VCSAdd<cr>
@@ -99,7 +117,8 @@ nmap <Leader>sRR :VCSRevert<cr>
 
 " fzf mappings
 command! -nargs=* AgClj call fzf#vim#ag(<q-args>, '-G "\.clj[cs]?$"', {})
-nmap <Leader>ff :Files $HOME<cr>
+nmap <Leader>ff :Files<cr>
+nmap <Leader>fh :Files $HOME<cr>
 nmap <Leader>fb :Buffers<cr>
 nmap <Leader>fg :AgClj<cr>
 
