@@ -7,17 +7,17 @@ Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
+Plug 'mbbill/undotree'
 Plug 'tpope/vim-fugitive'
 Plug 'jgdavey/tslime.vim'
-Plug 'vim-scripts/vcscommand.vim'
-Plug 'vim-syntastic/syntastic'
-Plug 'Valloric/YouCompleteMe'
+Plug 'w0rp/ale'
+Plug 'davidhalter/jedi-vim'
+Plug 'tpope/vim-surround'
 Plug 'guns/vim-sexp', {'for': 'clojure'}
-Plug 'venantius/vim-cljfmt'
+Plug 'guns/vim-clojure-highlight', {'for': 'clojure'}
 Plug 'tpope/vim-db'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fireplace', {'for': 'clojure'}
-Plug 'tpope/vim-surround', {'for': 'clojure'}
 Plug 'tpope/vim-sexp-mappings-for-regular-people', {'for': 'clojure'}
 call plug#end()
 
@@ -65,7 +65,8 @@ nmap P Pzz
 nmap <Leader>h :noh<cr>
 nmap <Leader>p :set paste<cr>
 nmap <Leader>P :set nopaste<cr>
-nmap <Leader>* :Eval (clojure.repl/pst)<cr>
+" Kill buffer
+nmap <Leader>K :bd<cr>
 " Copy mode: opens a copy of the buffer in the current window in a new tab and disables line numbers
 nmap <Leader>C :split<cr><C-W>T:se nonu<cr>
 " Go to tab by number
@@ -81,6 +82,7 @@ nmap <Leader>9 9gt
 nmap <Leader>0 :tablast<cr>
 
 nmap <c-n> :NERDTreeToggle<cr>
+nmap <F4> :UndotreeToggle<cr>
 
 " Fireplace mappings
 nmap <Leader>r :Require<cr>
@@ -91,6 +93,8 @@ nmap <Leader>t :.RunTests<cr>
 nmap <Leader>T :RunTests<cr>
 nmap <Leader>b :Last<cr>
 
+" Clojure stack trace
+nmap <Leader>* :Eval (clojure.repl/pst *e 50)<cr>
 " Clojure keyword to string
 " wb   - move to beginning of word
 " x    - delete colon
@@ -102,25 +106,19 @@ nmap <Leader>ks wbxysw"
 " i:  - insert a colon
 nmap <Leader>sk ds"wbi:<esc>
 
-" VCSCommand mappings
-nmap <Leader>sa :VCSAdd<cr>
-nmap <Leader>sb :VCSBlame<cr>
-nmap <Leader>sc :VCSCommit<cr>
-nmap <Leader>sD :VCSDelete<cr>
-nmap <Leader>sd :VCSDiff<cr>
-nmap <Leader>sv :VCSVimDiff<cr>
-nmap <Leader>si :VCSInfo<cr>
-nmap <Leader>sl :VCSLog<cr>
-nmap <Leader>ss :VCSStatus<cr>
-nmap <Leader>su :VCSUpdate<cr>
-nmap <Leader>sRR :VCSRevert<cr>
+" fugitive mappings
+nmap <Leader>gd :Gdiff<cr>
+nmap <Leader>gb :Gblame<cr>
+nmap <Leader>gl :Glog<cr>
+nmap <Leader>gs :Gstatus<cr>
+nmap <Leader>gc :Gcommit<cr>
 
 " fzf mappings
-command! -nargs=* AgClj call fzf#vim#ag(<q-args>, '-G "\.clj[cs]?$"', {})
+command! -nargs=* Ag call fzf#vim#ag(<q-args>, '-G "((\.clj[cs]?)|\.py|\.edn)$"', {})
 nmap <Leader>ff :Files<cr>
 nmap <Leader>fh :Files $HOME<cr>
 nmap <Leader>fb :Buffers<cr>
-nmap <Leader>fg :AgClj<cr>
+nmap <Leader>fg :Ag<cr>
 
 " Send selection to tmux
 vmap <Leader>z <Plug>SendSelectionToTmux
