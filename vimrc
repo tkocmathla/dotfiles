@@ -1,6 +1,8 @@
 call plug#begin()
 Plug 'altercation/vim-colors-solarized'
 Plug 'jnurmine/Zenburn'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-obsession'
 Plug 'milkypostman/vim-togglelist'
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
@@ -11,7 +13,6 @@ Plug 'mbbill/undotree'
 Plug 'tpope/vim-fugitive'
 Plug 'jgdavey/tslime.vim'
 Plug 'w0rp/ale'
-Plug 'davidhalter/jedi-vim'
 Plug 'tpope/vim-surround'
 Plug 'guns/vim-sexp', {'for': 'clojure'}
 Plug 'guns/vim-clojure-highlight', {'for': 'clojure'}
@@ -21,7 +22,8 @@ Plug 'tpope/vim-fireplace', {'for': 'clojure'}
 Plug 'tpope/vim-sexp-mappings-for-regular-people', {'for': 'clojure'}
 call plug#end()
 
-set rtp+=~/.local/lib/python2.7/site-packages/powerline/bindings/vim
+let g:airline_powerline_fonts = 1
+let g:airline_solarized_bg = 'dark'
 
 nnoremap <Space> <nop>
 let mapleader = " "
@@ -38,6 +40,7 @@ colorscheme solarized
 " Always show statusline
 set laststatus=2
 
+set noshowmode
 set hidden
 set confirm
 set number
@@ -49,6 +52,7 @@ set foldmethod=syntax
 set cursorline
 set listchars=tab:»\ ,nbsp:␣,trail:•,extends:⟩,precedes:⟨
 set list
+set mouse=a
 
 " Adjust behavior based on filetype
 autocmd BufNewFile,BufRead *.edn,*.clj,*.cljc,*.cljx set filetype=clojure
@@ -67,8 +71,6 @@ nmap <Leader>p :set paste<cr>
 nmap <Leader>P :set nopaste<cr>
 " Kill buffer
 nmap <Leader>K :bd<cr>
-" Copy mode: opens a copy of the buffer in the current window in a new tab and disables line numbers
-nmap <Leader>C :split<cr><C-W>T:se nonu<cr>
 " Go to tab by number
 nmap <Leader>1 1gt
 nmap <Leader>2 2gt
@@ -80,6 +82,16 @@ nmap <Leader>7 7gt
 nmap <Leader>8 8gt
 nmap <Leader>9 9gt
 nmap <Leader>0 :tablast<cr>
+
+" Navigate windows directly
+nmap <C-h> <C-w>h
+nmap <C-j> <C-w>j
+nmap <C-k> <C-w>k
+nmap <C-l> <C-w>l
+
+" Copy and paste using system clipboard
+nmap <Leader>y "+y
+vmap <Leader>y "+y
 
 nmap <c-n> :NERDTreeToggle<cr>
 nmap <F4> :UndotreeToggle<cr>
