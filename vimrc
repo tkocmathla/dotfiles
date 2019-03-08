@@ -131,7 +131,3 @@ nmap <Leader>ff :Files<cr>
 nmap <Leader>fh :Files $HOME<cr>
 nmap <Leader>fb :Buffers<cr>
 nmap <Leader>fg :Ag<cr>
-
-" Send selection to tmux
-vmap <Leader>z <Plug>SendSelectionToTmux
-nmap <Leader>x <Plug>SetTmuxVars
