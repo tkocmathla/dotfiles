@@ -1,0 +1,17 @@
+;; ~/.clojure/deps.edn
+
+{:deps
+ {com.stuartsierra/frequencies {:mvn/version "0.1.0"}}
+
+ :aliases
+ {:cider   {:extra-deps {cider/cider-nrepl {:mvn/version "0.21.1"}}
+            :main-opts ["-m" "nrepl.cmdline" "-i" "--middleware" "[cider.nrepl/cider-middleware]"]}
+  :uberjar {:extra-deps {seancorfield/depstar {:mvn/version "RELEASE"}}
+            :main-opts ["-m" "hf.depstar.uberjar"]}
+  :pack    {:extra-deps {pack/pack.alpha {:git/url "https://github.com/juxt/pack.alpha.git"
+                                          :sha "81b9e47d992b17aa3e3af1a47aed1f0287ebe9b8"}}
+            :main-opts ["-m"]}}}
+
+
+;; Other ideas:
+;; https://github.com/seancorfield/dot-clojure/blob/master/deps.edn
