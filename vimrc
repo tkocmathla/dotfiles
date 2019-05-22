@@ -56,7 +56,8 @@ set mouse=a
 
 " Adjust behavior based on filetype
 autocmd BufNewFile,BufRead *.edn,*.clj,*.cljc,*.cljx set filetype=clojure
-autocmd FileType clojure,html set ts=2 sw=2 et
+autocmd FileType clojure,html,yaml set ts=2 sw=2 et
+autocmd BufNewFile,BufRead Pipfile set syntax=dosini
 
 " Align NERDCommenter delimiters flush left
 let g:NERDDefaultAlign = 'left'
