@@ -1,0 +1,9 @@
+[user]
+    name = Matt Grimm
+[credential]
+    helper = cache --timeout 28800
+[core]
+    editor = nvim
+    excludesfile = ~/.gitignore_global
+[push]
+    default = simple

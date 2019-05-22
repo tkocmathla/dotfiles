@@ -1,0 +1,17 @@
+pom.xml
+
+# mac
+.DS_Store
+
+# vim Obsession
+Session.vim
+
+# vim swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+.hypothesis/
+.ipynb_checkpoints/
