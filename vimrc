@@ -20,10 +20,36 @@ Plug 'tpope/vim-db'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fireplace', {'for': 'clojure'}
 Plug 'tpope/vim-sexp-mappings-for-regular-people', {'for': 'clojure'}
+Plug 'davidhalter/jedi-vim', {'for': 'python'}
 call plug#end()
 
-let g:airline_powerline_fonts = 1
+let g:airline_theme = 'solarized'
 let g:airline_solarized_bg = 'dark'
+let g:airline_powerline_fonts = 1
+let g:airline_inactive_collapse = 1
+let g:airline_skip_empty_sections = 1
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+let g:airline#extensions#obsession#indicator_text = '[$]'
+let g:airline_section_z = "%{airline#util#wrap(airline#extensions#obsession#get_status(),0)}%#__accent_bold#%4l%#__restore__#%#__accent_bold#/%L%#__restore__#:%v"
+let g:airline_mode_map = {
+    \ '__' : '-',
+    \ 'c'  : 'C',
+    \ 'i'  : 'I',
+    \ 'ic' : 'I',
+    \ 'ix' : 'I',
+    \ 'n'  : 'N',
+    \ 'ni' : 'N',
+    \ 'no' : 'N',
+    \ 'R'  : 'R',
+    \ 'Rv' : 'R',
+    \ 's'  : 'S',
+    \ 'S'  : 'S',
+    \ '' : 'S',
+    \ 't'  : 'T',
+    \ 'v'  : 'V',
+    \ 'V'  : 'V',
+    \ '' : 'V',
+    \ }
 
 nnoremap <Space> <nop>
 let mapleader = " "
@@ -127,8 +153,12 @@ nmap <Leader>gs :Gstatus<cr>
 nmap <Leader>gc :Gcommit<cr>
 
 " fzf mappings
-command! -nargs=* Ag call fzf#vim#ag(<q-args>, '-G "((\.clj[cs]?)|\.py|\.edn)$"', {})
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
 nmap <Leader>ff :Files<cr>
 nmap <Leader>fh :Files $HOME<cr>
 nmap <Leader>fb :Buffers<cr>
-nmap <Leader>fg :Ag<cr>
+nmap <Leader>fg :Find<cr>
+
+" ALE mappings
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
