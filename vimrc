@@ -110,12 +110,6 @@ nmap <Leader>8 8gt
 nmap <Leader>9 9gt
 nmap <Leader>0 :tablast<cr>
 
-" Navigate windows directly
-nmap <C-h> <C-w>h
-nmap <C-j> <C-w>j
-nmap <C-k> <C-w>k
-nmap <C-l> <C-w>l
-
 " Copy and paste using system clipboard
 nmap <Leader>y "+y
 vmap <Leader>y "+y
@@ -162,3 +156,9 @@ nmap <Leader>fg :Find<cr>
 " ALE mappings
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+" Navigate windows directly
+nmap <C-h> <C-w>h
+nmap <C-j> <C-w>j
+nmap <C-k> <C-w>k
+nmap <C-l> <C-w>l
