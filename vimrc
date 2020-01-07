@@ -1,8 +1,10 @@
 call plug#begin()
-Plug 'altercation/vim-colors-solarized'
-Plug 'jnurmine/Zenburn'
+Plug 'davidhalter/jedi'
+Plug 'skywind3000/asyncrun.vim'
+Plug 'ycm-core/YouCompleteMe'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'altercation/vim-colors-solarized'
 Plug 'tpope/vim-obsession'
 Plug 'milkypostman/vim-togglelist'
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
@@ -10,17 +12,15 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'mbbill/undotree'
+Plug 'vhdirk/vim-cmake'
+Plug 'alepez/vim-gtest'
 Plug 'tpope/vim-fugitive'
-Plug 'jgdavey/tslime.vim'
-Plug 'w0rp/ale'
 Plug 'tpope/vim-surround'
 Plug 'guns/vim-sexp', {'for': 'clojure'}
 Plug 'guns/vim-clojure-highlight', {'for': 'clojure'}
-Plug 'tpope/vim-db'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fireplace', {'for': 'clojure'}
 Plug 'tpope/vim-sexp-mappings-for-regular-people', {'for': 'clojure'}
-Plug 'davidhalter/jedi-vim', {'for': 'python'}
 call plug#end()
 
 let g:airline_theme = 'solarized'
@@ -51,6 +51,14 @@ let g:airline_mode_map = {
     \ '' : 'V',
     \ }
 
+let g:ycm_autoclose_preview_window_after_insertion = 1
+
+let g:cmake_export_compile_commands = 1
+
+" Add an airline section for AsyncRun
+let g:asyncrun_status = ''
+let g:airline_section_error = airline#section#create_right(['%{g:asyncrun_status}'])
+
 nnoremap <Space> <nop>
 let mapleader = " "
 let maplocalleader = ","
@@ -62,6 +70,12 @@ syntax on
 set t_Co=256
 set background=dark
 colorscheme solarized
+augroup c,python
+    autocmd FileType c,python set colorcolumn=80
+augroup END
+augroup cpp
+    autocmd FileType cpp set colorcolumn=120
+augroup END
 
 " Always show statusline
 set laststatus=2
@@ -89,6 +103,7 @@ autocmd BufNewFile,BufRead Pipfile set syntax=dosini
 let g:NERDDefaultAlign = 'left'
 
 " Key mappings
+nmap <Leader>j :b#<cr>
 nmap n nzz
 nmap p pzz
 nmap N Nzz
@@ -122,7 +137,7 @@ nmap <Leader>r :Require<cr>
 nmap <Leader>R :Require!<cr>
 nmap <Leader>E :%Eval<cr>
 nmap <Leader>e :Eval<cr>
-nmap <Leader>t :.RunTests<cr>
+"nmap <Leader>t :.RunTests<cr>
 nmap <Leader>T :RunTests<cr>
 nmap <Leader>b :Last<cr>
 
@@ -140,25 +155,45 @@ nmap <Leader>ks wbxysw"
 nmap <Leader>sk ds"wbi:<esc>
 
 " fugitive mappings
-nmap <Leader>gd :Gdiff<cr>
-nmap <Leader>gb :Gblame<cr>
-nmap <Leader>gl :Glog<cr>
+command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
 nmap <Leader>gs :Gstatus<cr>
+nmap <Leader>gd :Gdiff<cr>
+nmap <Leader>gm :Gdiffsplit!<cr>
+nmap <Leader>gb :Gblame<cr>
+nmap <Leader>gf :Gfetch<cr>
+nmap <Leader>gl :Gpull<cr>
+nmap <Leader>gp :Gpush<cr>
 nmap <Leader>gc :Gcommit<cr>
+nmap <Leader>gL :BCommits<cr>
+nmap <Leader>g- :Git stash<cr>:e<cr>
+nmap <Leader>g+ :Git stash pop<cr>:e<cr>
 
 " fzf mappings
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --ignore-case --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
 nmap <Leader>ff :Files<cr>
 nmap <Leader>fh :Files $HOME<cr>
 nmap <Leader>fb :Buffers<cr>
 nmap <Leader>fg :Find<cr>
-
-" ALE mappings
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " Navigate windows directly
 nmap <C-h> <C-w>h
 nmap <C-j> <C-w>j
 nmap <C-k> <C-w>k
 nmap <C-l> <C-w>l
+
+" Map <Esc> to exit terminal-mode
+tnoremap <Esc> <C-\><C-n>
+
+" ycm mappings
+nmap <Leader>yrr :YcmCompleter RefactorRename 
+nmap <Leader>yrf :YcmCompleter FixIt<cr>
+nmap <Leader>yR :YcmCompleter RestartServer<cr>
+nmap <Leader>yt :YcmCompleter GetType<cr>
+nmap <Leader>yd :YcmCompleter GetDocImprecise<cr>
+nmap <Leader>yl :YcmCompleter GoToDeclaration<cr>
+nmap <Leader>yf :YcmCompleter GoToDefinition<cr>
+
+" gtest mappings
+nmap <Leader>tc :exec ':GTestCmd ' . trim(system('find ' . b:build_dir . ' -name ' . expand('%:t:r')))<cr>
+nmap <Leader>tt :GTestRun<cr>
+nmap <Leader>tu :GTestRunUnderCursor<cr>
