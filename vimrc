@@ -1,5 +1,5 @@
 call plug#begin()
-Plug 'davidhalter/jedi'
+Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'ycm-core/YouCompleteMe'
 Plug 'vim-airline/vim-airline'
@@ -12,8 +12,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'mbbill/undotree'
-Plug 'vhdirk/vim-cmake'
-Plug 'alepez/vim-gtest'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'guns/vim-sexp', {'for': 'clojure'}
@@ -52,8 +50,8 @@ let g:airline_mode_map = {
     \ }
 
 let g:ycm_autoclose_preview_window_after_insertion = 1
-
-let g:cmake_export_compile_commands = 1
+let g:ycm_always_populate_location_list = 1
+let g:ycm_max_num_candidates = 25
 
 " Add an airline section for AsyncRun
 let g:asyncrun_status = ''
@@ -89,10 +87,15 @@ set shiftwidth=4
 set expandtab
 set hlsearch
 set foldmethod=syntax
+set foldlevelstart=10
 set cursorline
 set listchars=tab:»\ ,nbsp:␣,trail:•,extends:⟩,precedes:⟨
 set list
 set mouse=a
+
+" Performance tweaks for syntax highlighting
+set synmaxcol=120
+let c_no_curly_error=1
 
 " Adjust behavior based on filetype
 autocmd BufNewFile,BufRead *.edn,*.clj,*.cljc,*.cljx set filetype=clojure
@@ -108,6 +111,7 @@ nmap n nzz
 nmap p pzz
 nmap N Nzz
 nmap P Pzz
+nmap <Leader>O :only<cr>
 nmap <Leader>h :noh<cr>
 nmap <Leader>p :set paste<cr>
 nmap <Leader>P :set nopaste<cr>
@@ -147,33 +151,72 @@ nmap <Leader>* :Eval (clojure.repl/pst *e 50)<cr>
 " wb   - move to beginning of word
 " x    - delete colon
 " ysw" - wrap word in double quotes
-nmap <Leader>ks wbxysw"
+nmap <LocalLeader>ks wbxysw"
 " Clojure string to keyword
 " ds" - delete surrounding double quotes
 " wb  - move to beginning of word
 " i:  - insert a colon
-nmap <Leader>sk ds"wbi:<esc>
+nmap <LocalLeader>sk ds"wbi:<esc>
 
-" fugitive mappings
+" git/fugitive mappings
+function! s:open_branch_or_tag_fzf(line)
+  let l:parser = split(a:line)
+  let l:branch = l:parser[0]
+  if l:branch ==? '*'
+    let l:branch = l:parser[1]
+  endif
+  execute '!git checkout ' . l:branch
+endfunction
+
+command! -bang -nargs=0 GCheckoutBranch
+  \ call fzf#vim#grep(
+  \   'git branch --sort=-creatordate', 0,
+  \   {
+  \     'sink': function('s:open_branch_or_tag_fzf')
+  \   },
+  \   <bang>0
+  \ )
+
+command! -bang -nargs=0 GCheckoutTag
+  \ call fzf#vim#grep(
+  \   'git tag --list --sort=-creatordate', 0,
+  \   {
+  \     'sink': function('s:open_branch_or_tag_fzf')
+  \   },
+  \   <bang>0
+  \ )
+
 command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
-nmap <Leader>gs :Gstatus<cr>
+nmap <Leader>gs :Git<cr>
+nmap <Leader>gb :GCheckoutBranch<cr>
+nmap <Leader>gt :GCheckoutTag<cr>
 nmap <Leader>gd :Gdiff<cr>
 nmap <Leader>gm :Gdiffsplit!<cr>
-nmap <Leader>gb :Gblame<cr>
-nmap <Leader>gf :Gfetch<cr>
-nmap <Leader>gl :Gpull<cr>
-nmap <Leader>gp :Gpush<cr>
-nmap <Leader>gc :Gcommit<cr>
-nmap <Leader>gL :BCommits<cr>
-nmap <Leader>g- :Git stash<cr>:e<cr>
-nmap <Leader>g+ :Git stash pop<cr>:e<cr>
+nmap <Leader>gM :Git mergetool<cr>
+nmap <Leader>ga :Git blame<cr>
+nmap <Leader>gf :Git fetch<cr>
+nmap <Leader>gl :Git pull<cr>
+nmap <Leader>gp :Git push<cr>
+nmap <Leader>gc :Git commit<cr>
+nmap <Leader>gC :Git commit --no-verify<cr>
+nmap <Leader>gL :Commits<cr>
+nmap <Leader>gSl :Git stash list<cr>
+nmap <Leader>gS- :Git stash<cr>:e<cr>
+nmap <Leader>gS+ :Git stash pop<cr>:e<cr>
+nmap <Leader>gV :!gitk %<cr>
 
 " fzf mappings
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --ignore-case --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* Find
+    \ call fzf#vim#grep(
+    \   'rg --column --line-number --no-heading --smart-case --glob "!.git/*" --glob "!build/*" --color "always" '.shellescape(<q-args>),
+    \   1,
+    \   fzf#vim#with_preview(),
+    \   <bang>0)
 nmap <Leader>ff :Files<cr>
 nmap <Leader>fh :Files $HOME<cr>
 nmap <Leader>fb :Buffers<cr>
 nmap <Leader>fg :Find<cr>
+nmap <leader>fl :BLines<cr>
 
 " Navigate windows directly
 nmap <C-h> <C-w>h
@@ -185,9 +228,9 @@ nmap <C-l> <C-w>l
 tnoremap <Esc> <C-\><C-n>
 
 " ycm mappings
-nmap <Leader>yrr :YcmCompleter RefactorRename 
-nmap <Leader>yrf :YcmCompleter FixIt<cr>
-nmap <Leader>yR :YcmCompleter RestartServer<cr>
+nmap <Leader>yRr :YcmCompleter RefactorRename 
+nmap <Leader>yRf :YcmCompleter FixIt<cr>
+nmap <Leader>yr :YcmCompleter GoToReferences<cr>
 nmap <Leader>yt :YcmCompleter GetType<cr>
 nmap <Leader>yd :YcmCompleter GetDocImprecise<cr>
 nmap <Leader>yl :YcmCompleter GoToDeclaration<cr>
@@ -197,3 +240,7 @@ nmap <Leader>yf :YcmCompleter GoToDefinition<cr>
 nmap <Leader>tc :exec ':GTestCmd ' . trim(system('find ' . b:build_dir . ' -name ' . expand('%:t:r')))<cr>
 nmap <Leader>tt :GTestRun<cr>
 nmap <Leader>tu :GTestRunUnderCursor<cr>
+
+if filereadable(".nvimrc")
+    source .nvimrc
+endif
