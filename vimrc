@@ -1,5 +1,6 @@
 call plug#begin('~/.vim/plugged')
 
+Plug 'chriskempson/base16-vim'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'ycm-core/YouCompleteMe', {'branch':'legacy-vim'}
@@ -38,9 +39,7 @@ filetype plugin indent on
 
 " set up color scheme
 syntax on
-set t_Co=256
-set background=dark
-colorscheme solarized
+colorscheme base16-gruvbox-dark-medium
 
 augroup c
     autocmd FileType c set colorcolumn=80
@@ -87,7 +86,7 @@ let c_no_curly_error=1
 " remap * to search and highlight but not jump (https://stackoverflow.com/a/4257175)
 nnoremap * :keepjumps normal! mi*`i<CR>
 
-" jump to last buffer
+" jump to last buffer (like ctrl-6)
 nmap <Leader>j :b#<cr>
 
 " center cursor on next search result
@@ -143,8 +142,6 @@ tnoremap <Esc> <C-\><C-n>
 "-----------------------------------
 
 let g:airline_highlighting_cache = 1
-let g:airline_theme = 'solarized'
-let g:airline_solarized_bg = 'dark'
 let g:airline_powerline_fonts = 1
 let g:airline_inactive_collapse = 1
 let g:airline_skip_empty_sections = 1
