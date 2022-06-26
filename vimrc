@@ -3,14 +3,12 @@ call plug#begin('~/.vim/plugged')
 Plug 'chriskempson/base16-vim'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'skywind3000/asyncrun.vim'
-Plug 'ycm-core/YouCompleteMe', {'branch':'legacy-vim'}
+Plug 'ycm-core/YouCompleteMe'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'altercation/vim-colors-solarized'
 Plug 'tpope/vim-obsession'
-Plug 'milkypostman/vim-togglelist'
-" https://github.com/junegunn/fzf.vim/issues/1301
-Plug 'junegunn/fzf', {'commit': '3f75a83', 'dir': '~/.fzf', 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
@@ -79,6 +77,17 @@ set foldlevelstart=10
 set cursorline
 set listchars=tab:»\ ,nbsp:␣,trail:•,extends:⟩,precedes:⟨
 set list
+set completeopt=popup,menuone
+set showcmd
+set splitright
+set splitbelow
+
+" toggle quickfix and location lists
+nnoremap <expr> <Leader>q empty(filter(getwininfo(), 'v:val.quickfix')) ? ':copen<CR>' : ':cclose<CR>'
+nnoremap <expr> <Leader>l empty(filter(getwininfo(), 'v:val.loclist')) ? ':lopen<CR>' : ':lclose<CR>'
+
+" open quickfix window full-width at the bottom
+autocmd FileType qf wincmd J
 
 " performance tweaks for syntax highlighting
 let c_no_curly_error=1
@@ -134,8 +143,15 @@ nmap <C-j> <C-w>j
 nmap <C-k> <C-w>k
 nmap <C-l> <C-w>l
 
-" map <Esc> to exit terminal-mode
-tnoremap <Esc> <C-\><C-n>
+" FIXME fully expand window horizontally and vertically
+"nmap <C-w>* <C-w><C-|><C-w><C-_>
+
+" open a vertical bash terminal
+nmap <Leader>t :vert term bash<cr>
+" map <Esc><Esc> to exit terminal-mode
+tnoremap <Esc><Esc> <C-\><C-n>
+" remap C-W when in terminal
+set termwinkey=<C-X>
 
 "-----------------------------------
 " Airline
@@ -147,7 +163,7 @@ let g:airline_inactive_collapse = 1
 let g:airline_skip_empty_sections = 1
 
 " don't display character encoding
-let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+let g:airline#parts#ffenc#skip_expected_string = 'utf-8[unix]'
 
 " print a glyph in the lower-right gutter to indicate vim-obsession is on
 let g:airline#extensions#obsession#indicator_text = '[$]'
@@ -156,22 +172,22 @@ let g:airline_section_z = "%{airline#util#wrap(airline#extensions#obsession#get_
 " abbreviate display of current vim mode to a single capital letter
 let g:airline_mode_map = {
     \ '__' : '-',
-    \ 'c'  : 'C',
-    \ 'i'  : 'I',
-    \ 'ic' : 'I',
-    \ 'ix' : 'I',
-    \ 'n'  : 'N',
-    \ 'ni' : 'N',
-    \ 'no' : 'N',
-    \ 'R'  : 'R',
-    \ 'Rv' : 'R',
+    \ 'c'  : 'COM',
+    \ 'i'  : 'INS',
+    \ 'ic' : 'INS',
+    \ 'ix' : 'INS',
+    \ 'n'  : 'NOR',
+    \ 'ni' : 'NOR',
+    \ 'no' : 'NOR',
+    \ 'R'  : 'REP',
+    \ 'Rv' : 'REP',
     \ 's'  : 'S',
     \ 'S'  : 'S',
     \ '' : 'S',
     \ 't'  : 'T',
-    \ 'v'  : 'V',
-    \ 'V'  : 'V',
-    \ '' : 'V',
+    \ 'v'  : 'VIS',
+    \ 'V'  : 'VIS',
+    \ '' : 'VIS',
     \ }
 
 " add an airline section for AsyncRun status
@@ -188,20 +204,25 @@ let g:asyncrun_status = ''
 " YouCompleteMe
 "-----------------------------------
 
-let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_add_preview_to_completeopt = 'popup'
 let g:ycm_always_populate_location_list = 1
+let g:ycm_auto_hover = ''
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_max_num_candidates = 25
 
-nmap <Leader>yRr :YcmCompleter RefactorRename
+nmap <Leader>yRr :YcmCompleter RefactorRename 
 nmap <Leader>yRf :YcmCompleter FixIt<cr>
 nmap <Leader>yr :YcmCompleter GoToReferences<cr>
-nmap <Leader>yt :YcmCompleter GetType<cr>
-nmap <Leader>yd :YcmCompleter <plug>(YCMHover)
+nmap <Leader>yt :YcmCompleter GetTypeImprecise<cr>
+nmap <Leader>yT :YcmCompleter GetType<cr>
+nmap <Leader>yd :YcmCompleter GetDocImprecise<cr>
+nmap <Leader>yD :YcmCompleter GetDoc<cr>
 nmap <Leader>yl :YcmCompleter GoToDeclaration<cr>
 nmap <Leader>yf :YcmCompleter GoToDefinition<cr>
 nmap <Leader>yF :YcmCompleter Format<cr>
 nmap <Leader>yu :YcmRestartServer<cr>
-nmap <Leader>yU :execute '!./cmake_setup.sh -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DGENERATE_SYMBOLS=ON' <bar> :YcmRestartServer<cr>
+nmap <Leader>yU :execute '!./cmake_setup.sh -DCMAKE_EXPORT_COMPILE_COMMANDS=ON' <bar> :YcmRestartServer<cr>
 
 "-----------------------------------
 " NERDCommenter
@@ -227,13 +248,12 @@ nmap <F4> :UndotreeToggle<cr>
 " Fireplace
 "-----------------------------------
 
-nmap <Leader>r :Require<cr>
-nmap <Leader>R :Require!<cr>
-nmap <Leader>E :%Eval<cr>
-nmap <Leader>e :Eval<cr>
-"nmap <Leader>t :.RunTests<cr>
-nmap <Leader>T :RunTests<cr>
-nmap <Leader>b :Last<cr>
+nmap <LocalLeader>r :Require<cr>
+nmap <LocalLeader>R :Require!<cr>
+nmap <LocalLeader>E :%Eval<cr>
+nmap <LocalLeader>e :Eval<cr>
+nmap <LocalLeader>T :RunTests<cr>
+nmap <LocalLeader>b :Last<cr>
 
 " clojure stack trace
 nmap <Leader>* :Eval (clojure.repl/pst *e 50)<cr>
@@ -311,7 +331,21 @@ nmap <Leader>gC :Git commit --no-verify<cr>
 nmap <Leader>gg :BCommits<cr>
 
 " git-grep for word under cursor
-nmap <leader>gG :Ggrep <c-r>=expand("<cword>")<cr><cr>
+"   - ! means do not automatically jump to the first result
+"   - --quiet means open results directly in quickfix list
+nmap <Leader>gG :Ggrep! --quiet <c-r>=expand("<cword>")<cr><cr>
+
+" git-grep for visual selection
+"   - uses g register
+"   - [0] means use only first line of visual selection
+"   - highlights pattern in results
+"   - ! means do not automatically jump to the first result
+"   - --quiet means open results directly in quickfix list
+vmap <Leader>gG qgq
+              \ "gy <bar>
+              \ :execute ':Ggrep! --quiet ' . escape(getreg('g', 1, 1)[0], ' "')<cr>
+              \ /<c-r>=getreg('g', 1, 1)[0]<cr><cr>
+              \ ^
 
 " show stash log
 nmap <Leader>gSl :Gclog -g stash<cr>
@@ -328,7 +362,8 @@ nmap <Leader>gS+ :Git stash pop<cr>:e<cr>
 
 " search for files by name
 command! -bang MyFiles call fzf#vim#files('/opt/software', <bang>0)
-nmap <Leader>ff :MyFiles<cr>
+nmap <Leader>fF :MyFiles<cr>
+nmap <Leader>ff :GitFiles<cr>
 nmap <Leader>fh :Files $HOME<cr>
 
 " search buffers by file name
