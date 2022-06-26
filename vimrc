@@ -376,6 +376,14 @@ nmap <Leader>fg :Rg<cr>
 nmap <leader>fl :BLines<cr>
 
 "-----------------------------------
+" $WORK-specifics
+"-----------------------------------
+
+if filereadable(".vimrc-work")
+    source .vimrc-work
+endif
+
+"-----------------------------------
 " NOTE: this must be last
 "-----------------------------------
 
