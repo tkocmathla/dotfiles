@@ -1,0 +1,138 @@
+HISTSIZE=100000
+HISTFILESIZE=100000
+
+shopt -s direxpand
+
+# Source global definitions
+[ -f /etc/bashrc ] && source /etc/bashrc
+
+# Source fzf
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+export HISTCONTROL=ignoreboth:erasedups
+
+# Prints current git branch or hash
+git_branch() {
+  branch=$(git branch --show-current 2>/dev/null)
+  if [[ -z "${branch}" ]]; then
+    branch=$(git rev-parse --short HEAD 2>/dev/null)
+  fi
+  echo ${branch}
+}
+
+# Prints a summary of how many commits the current branch is behind origin/main,
+# and how many commits it is ahead of its merge base
+#
+# This is definitely not perfect but works well for the SN branch-then-squash-merge workflow.
+#
+# TODO need a "behind this branch on origin" as well as "behind origin/main"
+git_changes() {
+  behind=$(git rev-list --count --no-merges HEAD..origin/main 2>/dev/null)
+  ahead=$(git rev-list --count --no-merges $(git merge-base origin/main HEAD 2>/dev/null)..HEAD 2>/dev/null)
+  if [[ -n ${behind} && -n ${ahead} ]]; then
+    echo " -${behind},+${ahead}"
+  fi
+}
+
+yellow=$(tput setaf 3)
+green=$(tput setaf 2)
+red=$(tput setaf 1)
+export PS1="\n\[$yellow\]\h \[$green\]\w \[$red\](\$(git_branch)\$(git_changes))\[\033[0m\]\n$ "
+
+# cd's to the directory of the file given by $1
+cdd() {
+  cd $(dirname $1)
+}
+
+tarfor() {
+    tar -xzvf $1 --wildcards --no-anchored $2
+}
+
+zbat() {
+    gunzip -cd $1 | bat --file-name ${1%.*}
+}
+
+alias l='ls -lh'
+alias la='ls -lAh'
+alias ll='ls -lh'
+alias lsa='ls -lah'
+alias pu='ps -fu'
+alias fu='pu'
+
+alias gdi='git diff --no-index'
+alias gdw='git diff --word-diff=color --no-index'
+alias gd='git diff --color'
+alias gds='git diff --color --staged'
+alias gs='git switch'
+alias gfa='git fetch'
+alias gf='git fetch origin $(git rev-parse --abbrev-ref HEAD)'
+alias gfo='git fetch origin'
+gfos() { git fetch origin $1 && git switch $1; }
+alias gla='git pull'
+alias gl='git pull origin $(git rev-parse --abbrev-ref HEAD)'
+alias gp='git push'
+alias grh='git reset --hard'
+alias gst='git status'
+alias gco='git checkout'
+alias gcm='git checkout main'
+alias gcmb='git checkout $(git merge-base origin/main HEAD)'
+alias glol='git log --graph --pretty='\''%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'\'
+
+if [[ -f /usr/share/bash-completion/completions/git ]]; then
+  source /usr/share/bash-completion/completions/git
+fi
+
+export PATH=$HOME/bin:$PATH
+
+export CMAKE_COLOR_DIAGNOSTICS=ON
+export CTEST_OUTPUT_ON_FAILURE=1
+
+export HISTTIMEFORMAT="%F %T "
+
+# Use rg as the default file finder so we respect .gitignore
+export FZF_DEFAULT_COMMAND="rg --files --hidden --no-ignore-vcs"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# Use fd (https://github.com/sharkdp/fd) instead of the default find
+# command for listing path candidates.
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
+_fzf_compgen_path() {
+  fd --hidden --follow . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type d --hidden --follow . "$1"
+}
+
+_fzf_complete_bazel_test() {
+  _fzf_complete '-m' "$@" < <(command bazel query \
+    "kind('(test|test_suite) rule', //...)" 2> /dev/null)
+}
+
+_fzf_complete_bazel() {
+  local tokens
+  tokens=(${(z)LBUFFER})
+
+  if [ ${#tokens[@]} -ge 3 ] && [ "${tokens[2]}" = "test" ]; then
+    _fzf_complete_bazel_test "$@"
+  else
+    # Might be able to make this better someday, by listing all repositories
+    # that have been configured in a WORKSPACE.
+    # See https://stackoverflow.com/questions/46229831/ or just run
+    #     bazel query //external:all
+    # This is the reason why things like @ruby_2_6//:ruby.tar.gz don't show up
+    # in the output: they're not a dep of anything in //..., but they are deps
+    # of @ruby_2_6//...
+    _fzf_complete '-m' "$@" < <(command bazel query --keep_going \
+      --noshow_progress \
+      "kind('(binary rule)|(generated file)', deps(//...))" 2> /dev/null)
+  fi
+}
+
+complete -F _bazel__complete -o nospace bazel/lldb
+
+if [[ -f ~/.bashrc_work ]]; then
+  source ~/.bashrc_work
+fi
