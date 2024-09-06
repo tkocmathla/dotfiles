@@ -1,0 +1,17 @@
+return {
+    { "bufferline.nvim",       enabled = false },
+    { "cmp-buffer",            enabled = false },
+    { "conform.nvim",          enabled = false },
+    { "flash.nvim",            enabled = false },
+    { "friendly-snippets",     enabled = false },
+    { "gitsigns.nvim",         enabled = false },
+    { "indent-blankline.nvim", enabled = false },
+    { "lazygit.vim",           enabled = false },
+    { "mini.ai",               enabled = false },
+    { "mini.comment",          enabled = false },
+    { "mini.indentscope",      enabled = false },
+    { "mini.nvim",             enabled = false },
+    { "mini.pairs",            enabled = false },
+    { "neo-tree.nvim",         enabled = false },
+    { "noice.nvim",            enabled = false },
+}
