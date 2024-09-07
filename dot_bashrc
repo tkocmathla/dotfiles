@@ -59,6 +59,8 @@ alias lsa='ls -lah'
 alias pu='ps -fu'
 alias fu='pu'
 
+alias cz='chezmoi'
+
 alias gdi='git diff --no-index'
 alias gdw='git diff --word-diff=color --no-index'
 alias gd='git diff --color'
