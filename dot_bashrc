@@ -23,7 +23,7 @@ git_branch() {
 # Prints a summary of how many commits the current branch is behind origin/main,
 # and how many commits it is ahead of its merge base
 #
-# This is definitely not perfect but works well for the SN branch-then-squash-merge workflow.
+# This is definitely not perfect but works well for a branch-then-squash-merge workflow.
 #
 # TODO need a "behind this branch on origin" as well as "behind origin/main"
 git_changes() {
