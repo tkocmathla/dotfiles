@@ -19,7 +19,12 @@ config.keys = {
     key = 'a',
     mods = 'SHIFT|CTRL',
     action = act.PaneSelect,
-  }
+  },
+  {
+    key = 'o',
+    mods = 'SHIFT|CTRL',
+    action = act.RotatePanes 'Clockwise',
+  },
 }
 
 config.hide_tab_bar_if_only_one_tab = true
