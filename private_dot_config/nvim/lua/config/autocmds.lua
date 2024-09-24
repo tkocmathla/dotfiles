@@ -4,6 +4,9 @@
 
 vim.filetype.add({
   extension = {
-    mlir = "mlir",
+    mlir = 'mlir',
+  },
+  pattern = {
+    ['.*[.]h[.]inc'] = 'cpp',
   },
 })
