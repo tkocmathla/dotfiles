@@ -34,7 +34,7 @@ wk.register({
 
 -- Git
 vim.keymap.set("n", "<leader>gb", ":Telescope git_branches<cr>")
-vim.keymap.set("n", "<leader>gs", ":G<cr>", { desc = "Git status" })
+vim.keymap.set("n", "<leader>gs", ":G<cr>", { desc = "Git status" }, { remap = true })
 vim.keymap.set("n", "<leader>gd", ":Gdiff<cr>", { desc = "Git diff" })
 vim.keymap.set("n", "<leader>gm", ":Gvdiffsplit!<cr>", { desc = "Git 3-way merge" })
 vim.keymap.set("n", "<leader>gM", ":G mergetool<cr>", { desc = "Git merge-tool" })
