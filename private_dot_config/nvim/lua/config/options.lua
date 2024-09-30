@@ -7,8 +7,8 @@ vim.g.autoformat = false
 
 local opt = vim.opt
 
--- Set default shell to bash
-opt.shell = "bash"
+-- Set default shell to zsh
+opt.shell = "zsh"
 
 -- Disable mouse support
 opt.mouse = ""

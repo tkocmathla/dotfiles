@@ -8,5 +8,6 @@ vim.filetype.add({
   },
   pattern = {
     ['.*[.]h[.]inc'] = 'cpp',
+    ['.*[.]cpp[.]inc'] = 'cpp',
   },
 })

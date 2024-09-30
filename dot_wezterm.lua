@@ -4,27 +4,12 @@ local act = wezterm.action
 
 config.color_scheme = 'Catppuccin Frappe'
 
+config.leader = { key = ' ', mods = 'CTRL', timeout_milliseconds = 1000 }
 config.keys = {
-  {
-    key = 'f',
-    mods = 'SHIFT|CTRL',
-    action = act.ToggleFullScreen,
-  },
-  {
-    key = 'r',
-    mods = 'SHIFT|CTRL',
-    action = act.ReloadConfiguration,
-  },
-  {
-    key = 'a',
-    mods = 'SHIFT|CTRL',
-    action = act.PaneSelect,
-  },
-  {
-    key = 'o',
-    mods = 'SHIFT|CTRL',
-    action = act.RotatePanes 'Clockwise',
-  },
+  { key = 'f', mods = 'LEADER', action = act.ToggleFullScreen },
+  { key = 'r', mods = 'LEADER', action = act.ReloadConfiguration },
+  { key = 'a', mods = 'LEADER', action = act.PaneSelect },
+  { key = 'o', mods = 'LEADER', action = act.RotatePanes 'Clockwise' },
 }
 
 config.hide_tab_bar_if_only_one_tab = true
