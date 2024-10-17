@@ -108,8 +108,10 @@ fi
 source <(fzf --zsh)
 
 alias bat='batcat'
+alias cat='batcat -p'
 alias cz='chezmoi'
 alias fd='fdfind'
+alias grep='rg'
 alias python='python3'
 alias vi='nvim'
 alias vim='nvim'
