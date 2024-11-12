@@ -23,7 +23,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 return {
     "neovim/nvim-lspconfig",
     config = function()
-        require("lspconfig").pyright.setup{}
+        require("lspconfig").pylsp.setup{}
         require("lspconfig").jsonnet_ls.setup{}
     end,
     opts = {

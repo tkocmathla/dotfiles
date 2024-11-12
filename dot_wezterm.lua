@@ -8,6 +8,10 @@ config.leader = { key = ' ', mods = 'CTRL', timeout_milliseconds = 1000 }
 config.keys = {
   { key = 'c', mods = 'LEADER', action = act.SpawnCommandInNewTab { args = { 'nvim', wezterm.home_dir .. '/.wezterm.lua' }}},
 
+  -- Override accidental shift+space and shift+enter so we get the keypress instead of `;2u'
+  { key = ' ', mods = 'SHIFT', action = act.SendKey{key=' '}},
+  { key = 'Enter', mods = 'SHIFT', action = act.SendKey{key='Enter'}},
+
   { key = 'f', mods = 'LEADER', action = act.ToggleFullScreen },
   { key = 'r', mods = 'LEADER', action = act.ReloadConfiguration },
 
