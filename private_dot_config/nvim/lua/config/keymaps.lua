@@ -13,24 +13,22 @@ vim.keymap.set("n", "<leader>E", ":NvimTreeToggle<cr>", { desc = "File explorer 
 vim.keymap.set("n", "<leader>e", ":NvimTreeFindFileToggle %<cr>", { desc = "File explorer (at file)" })
 
 -- Nvim DAP
-wk.register({
-    d = {
-        name = "+dap",
-        b = { function() require("dap").toggle_breakpoint() end, "Toggle breakpoint" },
-        c = { function() require("dap").continue() end, "Continue" },
-        n = { function() require("dap").step_over() end, "Step over" },
-        i = { function() require("dap").step_into() end, "Step into" },
-        o = { function() require("dap").step_out() end, "Step out" },
-        t = { function() require("dap").terminate() end, "Terminate session" },
-        w = { function() require("dapui").toggle() end, "Toggle UI" },
-    }
-}, { prefix = "<leader>" })
+wk.add({
+    { "<leader>d", group = "dap" },
+    { "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "Toggle breakpoint" },
+    { "<leader>dc", function() require("dap").continue() end, desc = "Continue" },
+    { "<leader>dn", function() require("dap").step_over() end, desc = "Step over" },
+    { "<leader>di", function() require("dap").step_into() end, desc = "Step into" },
+    { "<leader>do", function() require("dap").step_out() end, desc = "Step out" },
+    { "<leader>dt", function() require("dap").terminate() end, desc = "Terminate session" },
+    { "<leader>dw", function() require("dapui").toggle() end, desc = "Toggle UI" },
+})
 
-wk.register({
-    ["<F5>"] = { function() require("dap").continue() end, "Continue" },
-    ["<F6>"] = { function() require("dap").step_over() end, "Step over" },
-    ["<F7>"] = { function() require("dap").step_into() end, "Step into" },
-    ["<F8>"] = { function() require("dap").step_out() end, "Step out" },
+wk.add({
+    {"<F5>", function() require("dap").continue() end, desc = "Continue" },
+    {"<F6>", function() require("dap").step_over() end, desc = "Step over" },
+    {"<F7>", function() require("dap").step_into() end, desc = "Step into" },
+    {"<F8>", function() require("dap").step_out() end, desc = "Step out" },
 })
 
 -- Git
