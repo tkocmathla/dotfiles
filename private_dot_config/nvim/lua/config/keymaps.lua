@@ -33,13 +33,11 @@ wk.register({
     ["<F8>"] = { function() require("dap").step_out() end, "Step out" },
 })
 
--- Diffview
-vim.keymap.set("n", "<leader>cD", ":DiffviewOpen origin/main<cr>", { desc = "Diff branch against origin/main" })
-
 -- Git
 vim.keymap.set("n", "<leader>gb", ":Telescope git_branches<cr>")
 vim.keymap.set("n", "<leader>gs", ":G<cr>", { desc = "Git status", remap = true })
 vim.keymap.set("n", "<leader>gd", ":Gdiff<cr>", { desc = "Git diff" })
+vim.keymap.set("n", "<leader>gD", ":DiffviewOpen origin/main<cr>", { desc = "Git diff branch against origin/main" })
 vim.keymap.set("n", "<leader>gm", ":Gvdiffsplit!<cr>", { desc = "Git 3-way merge" })
 vim.keymap.set("n", "<leader>gM", ":G mergetool<cr>", { desc = "Git merge-tool" })
 vim.keymap.set("n", "<leader>ga", ":G blame<cr>", { desc = "Git blame" })
