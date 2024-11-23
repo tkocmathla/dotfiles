@@ -1,11 +1,5 @@
 return {
   {
-    "Mofiqul/dracula.nvim",
-    opts = {
-      italic_comment = true,
-    },
-  },
-  {
     "catppuccin/nvim",
     opts = {
       dim_inactive = {
