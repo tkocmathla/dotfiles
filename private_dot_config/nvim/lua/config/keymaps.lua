@@ -2,6 +2,7 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 local wk = require("which-key")
+local locals = require("config.locals")
 
 -- Nvim
 vim.keymap.set("n", "<leader>C", ":NvimTreeOpen ~/.config/nvim/lua<cr>", { desc = "Jump to config" })
@@ -105,8 +106,7 @@ vim.keymap.set(
 
 -- yank a shareable github url for the current file + line to clipboard register
 vim.keymap.set("n", "<leader>gu", function()
-    -- FIXME make github URL configurable
-    local url = "https://github/"
+    local url = locals.github_base_url
         .. vim.fn.expand("%:.")
         .. "#L"
         .. vim.fn.line(".")
@@ -116,8 +116,7 @@ end, { desc = "Yank GitHub URL to clipboard (main)" })
 
 -- yank a shareable github permalink url for the current file + line to clipboard register
 vim.keymap.set("n", "<leader>gU", function()
-    -- FIXME make github URL configurable
-    local url = "https://github/"
+    local url = locals.github_base_url
         .. vim.fn["fugitive#RevParse"]("HEAD")
         .. "/"
         .. vim.fn.expand("%:.")

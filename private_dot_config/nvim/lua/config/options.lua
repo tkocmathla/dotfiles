@@ -1,6 +1,7 @@
 -- Options are automatically loaded before lazy.nvim startup
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
+local locals = require("config.locals")
 
 -- Disable LazyVim autoformat
 vim.g.autoformat = false
@@ -48,3 +49,5 @@ opt.ignorecase = true
 opt.incsearch = true
 -- Override ignorecase if the search pattern contains uppercase characters
 opt.smartcase = true
+
+locals.options()
