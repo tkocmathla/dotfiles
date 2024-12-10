@@ -32,11 +32,23 @@ wk.add({
     {"<F8>", function() require("dap").step_out() end, desc = "Step out" },
 })
 
+-- Go
+wk.add({
+    { "<leader>G", group = "go" },
+    { "<leader>Gf", ":GoFmt<cr>", { desc = "Go format" }},
+    { "<leader>Gr", ":GoRun<cr>", { desc = "Go run" }},
+    { "<leader>Gb", ":GoBuild<cr>", { desc = "Go build" }},
+})
+
 -- Git
 vim.keymap.set("n", "<leader>gb", ":Telescope git_branches<cr>")
 vim.keymap.set("n", "<leader>gs", ":G<cr>", { desc = "Git status", remap = true })
 vim.keymap.set("n", "<leader>gd", ":Gdiff<cr>", { desc = "Git diff" })
-vim.keymap.set("n", "<leader>gD", ":G merge-base origin/main HEAD | DiffviewOpen<cr>", { desc = "Git diff branch changes" })
+vim.keymap.set("n", "<leader>gD",
+               function()
+                 res = vim.api.nvim_exec2("G merge-base origin/main HEAD", { output = true })
+                 vim.cmd("DiffviewOpen " .. res["output"])
+               end, { desc = "Git diff branch changes" })
 vim.keymap.set("n", "<leader>gm", ":Gvdiffsplit!<cr>", { desc = "Git 3-way merge" })
 vim.keymap.set("n", "<leader>gM", ":G mergetool<cr>", { desc = "Git merge-tool" })
 vim.keymap.set("n", "<leader>ga", ":G blame<cr>", { desc = "Git blame" })
