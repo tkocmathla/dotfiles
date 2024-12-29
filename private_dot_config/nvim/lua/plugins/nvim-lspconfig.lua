@@ -1,3 +1,5 @@
+local locals = require("config.locals")
+
 -- https://github.com/neovim/nvim-lspconfig#keybindings-and-completion
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("UserLspConfig", {}),
@@ -20,37 +22,21 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 return {
-    "neovim/nvim-lspconfig",
-    config = function()
-        require("lspconfig").pylsp.setup{}
-        require("lspconfig").gopls.setup{
-            cmd = {'gopls'},
-            -- for postfix snippets and analyzers
-            --capabilities = capabilities,
-            --    settings = {
-            --    gopls = {
-            --        experimentalPostfixCompletions = true,
-            --        analyses = {
-            --            unusedparams = true,
-            --            shadow = true,
-            --        },
-            --        staticcheck = true,
-            --        },
-            --    },
-            --on_attach = on_attach,
-        }
-    end,
-    opts = {
-        servers = {
-            clangd = {
-                cmd = {
-                    "clangd",
-                    "--background-index",
-                    "--clang-tidy",
-                    "--header-insertion=iwyu",
-                    "--completion-style=detailed",
-                },
-            },
-        },
-    },
+  "neovim/nvim-lspconfig",
+  config = function()
+    require("lspconfig").gopls.setup{ cmd = {"gopls"} }
+    require("lspconfig").clangd.setup{
+      cmd = {
+        "clangd",
+        "-j", "8",
+        "--background-index",
+        "--clang-tidy",
+        "--completion-style=detailed",
+        -- Clangd queries the compiler for its system include paths, but only if
+        -- the compiler executable is explicitly named--using a fully-qualified
+        -- path--in this option.
+        "--query-driver=" .. locals.repo_root .. "/external/toolchains_llvm~~llvm~llvm_toolchain/bin/cc_wrapper.sh",
+      },
+    }
+  end,
 }
