@@ -29,6 +29,7 @@ return {
       cmd = {
         "clangd",
         "-j", "8",
+        "--log=info",
         "--background-index",
         "--clang-tidy",
         "--completion-style=detailed",
