@@ -9,6 +9,9 @@ vim.keymap.set("n", "<leader>C", ":NvimTreeOpen ~/.config/nvim/lua<cr>", { desc 
 vim.keymap.set("n", "<leader>H", ":noh<cr>", { desc = "Clear highlights" })
 vim.keymap.set("t", "<esc><esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
+vim.keymap.set("n", "<leader>yf", ":let @+ = expand('%')<cr>", { desc = "Copy relative path to current file" })
+vim.keymap.set("n", "<leader>yF", ":let @+ = expand('%:p')<cr>", { desc = "Copy absolute path to current file" })
+
 -- NvimTree
 vim.keymap.set("n", "<leader>E", ":NvimTreeToggle<cr>", { desc = "File explorer (at root)" })
 vim.keymap.set("n", "<leader>e", ":NvimTreeFindFileToggle %<cr>", { desc = "File explorer (at file)" })
