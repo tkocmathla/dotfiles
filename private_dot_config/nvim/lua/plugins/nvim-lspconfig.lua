@@ -25,6 +25,18 @@ return {
   "neovim/nvim-lspconfig",
   config = function()
     require("lspconfig").gopls.setup{ cmd = {"gopls"} }
+    require("lspconfig").pylsp.setup{
+      settings = {
+        pylsp = {
+          plugins = {
+            -- Prefer black over yapf or pycodestyle lints.
+            black = { enabled = true },
+            yapf = { enabled = false },
+            pycodestyle = { enabled = false },
+          }
+        }
+      }
+    }
     require("lspconfig").clangd.setup{
       cmd = {
         "clangd",
