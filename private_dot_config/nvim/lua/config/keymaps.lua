@@ -13,8 +13,8 @@ vim.keymap.set("n", "<leader>yf", ":let @+ = expand('%')<cr>", { desc = "Copy re
 vim.keymap.set("n", "<leader>yF", ":let @+ = expand('%:p')<cr>", { desc = "Copy absolute path to current file" })
 
 -- NvimTree
-vim.keymap.set("n", "<leader>E", ":NvimTreeToggle<cr>", { desc = "File explorer (at root)" })
-vim.keymap.set("n", "<leader>e", ":NvimTreeFindFileToggle %<cr>", { desc = "File explorer (at file)" })
+vim.keymap.set("n", "<leader>E", ":NvimTreeToggle<cr>", { desc = "Toggle file explorer" })
+vim.keymap.set("n", "<leader>e", ":NvimTreeFindFileToggle! %<cr>", { desc = "Open file explorer at current file" })
 
 -- Nvim DAP
 wk.add({
