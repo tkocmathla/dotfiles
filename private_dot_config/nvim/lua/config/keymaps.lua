@@ -85,6 +85,11 @@ vim.keymap.set(
     { desc = "Git fetch and merge main" }
 )
 
+-- log of current file
+--   - ! means do not automatically jump to the first result
+--   - -p means show diffs for each commit
+vim.keymap.set("n", "<leader>go", ":Gclog! -- % -p<cr>", { desc = "Git log (current file)" })
+
 -- show stash log
 vim.keymap.set("n", "<leader>gSl", ":Telescope git_stash<cr>", { desc = "Git stash list" })
 
