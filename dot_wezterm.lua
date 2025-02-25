@@ -3,6 +3,9 @@ local config = wezterm.config_builder()
 local act = wezterm.action
 
 config.color_scheme = 'Catppuccin Frappe'
+config.hide_tab_bar_if_only_one_tab = true
+config.window_background_opacity = 0.95
+config.scrollback_lines = 10000
 
 config.leader = { key = ' ', mods = 'CTRL', timeout_milliseconds = 1000 }
 config.keys = {
@@ -12,6 +15,7 @@ config.keys = {
   { key = ' ', mods = 'SHIFT', action = act.SendKey{key=' '}},
   { key = 'Enter', mods = 'SHIFT', action = act.SendKey{key='Enter'}},
 
+  -- General
   { key = 'f', mods = 'LEADER', action = act.ToggleFullScreen },
   { key = 'r', mods = 'LEADER', action = act.ReloadConfiguration },
 
@@ -29,6 +33,10 @@ config.keys = {
   { key = 'k', mods = 'CTRL|SHIFT|ALT', action = act.AdjustPaneSize { 'Up', 5 }},
   { key = 'l', mods = 'CTRL|SHIFT|ALT', action = act.AdjustPaneSize { 'Right', 5 }},
 
+  -- Tab movement
+  { key = '[', mods = 'LEADER', action = act.MoveTabRelative(-1) },
+  { key = ']', mods = 'LEADER', action = act.MoveTabRelative(1) },
+
   -- Interactively rename current tab
   -- https://wezfurlong.org/wezterm/config/lua/keyassignment/PromptInputLine.html#example-of-interactively-renaming-the-current-tab
   {
@@ -45,8 +53,28 @@ config.keys = {
   },
 }
 
-config.hide_tab_bar_if_only_one_tab = true
-config.window_background_opacity = 0.95
-config.scrollback_lines = 10000
+-- Adds a bell icon to the tab title when unseen output is detected.
+wezterm.on(
+  'format-tab-title',
+  function(tab, tabs, panes, config, hover, max_width)
+    local title = tab.tab_title
+    if title == "" then
+      title = tab.active_pane.title
+    end
+
+    local has_unseen_output = false
+    for _, pane in ipairs(tab.panes) do
+      if pane.has_unseen_output then
+        has_unseen_output = true
+        break
+      end
+    end
+    if has_unseen_output then
+      return {{ Text = '\u{f0a2}  ' .. title .. ' ' }}
+    end
+
+    return title
+  end
+)
 
 return config
