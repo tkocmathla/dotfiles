@@ -44,8 +44,8 @@ wk.add({
 })
 
 -- Git
-vim.keymap.set("n", "<leader>gb", ":Telescope git_branches<cr>")
-vim.keymap.set("n", "<leader>gs", ":G<cr>", { desc = "Git status", remap = true })
+vim.keymap.set("n", "<leader>gb", ":FzfLua git_branches<cr>")
+vim.keymap.set("n", "<leader>gs", ":G<cr>", { desc = "Git status", noremap = true })
 vim.keymap.set("n", "<leader>gd", ":Gdiff<cr>", { desc = "Git diff" })
 vim.keymap.set("n", "<leader>gD",
                function()
@@ -72,7 +72,7 @@ vim.keymap.set("n", "<leader>gL", ":G pull<cr>", { desc = "Git pull (all)" })
 vim.keymap.set("n", "<leader>gp", ":G push -u origin HEAD<cr>", { desc = "Git push" })
 
 -- commit with hooks
-vim.keymap.set("n", "<leader>gc", ":G commit<cr>", { desc = "Git commit" })
+vim.keymap.set("n", "<leader>gc", ":G commit<cr>", { desc = "Git commit", noremap = true })
 
 -- commit without running hooks
 vim.keymap.set("n", "<leader>gC", ":G commit --no-verify<cr>", { desc = "Git commit (skip hooks)" })
@@ -91,7 +91,7 @@ vim.keymap.set(
 vim.keymap.set("n", "<leader>go", ":Gclog! -- % -p<cr>", { desc = "Git log (current file)" })
 
 -- show stash log
-vim.keymap.set("n", "<leader>gSl", ":Telescope git_stash<cr>", { desc = "Git stash list" })
+vim.keymap.set("n", "<leader>gSl", ":FzfLua git_stash<cr>", { desc = "Git stash list" })
 
 -- push to stash
 vim.keymap.set("n", "<leader>gS-", ":Git stash<cr>:e<cr>", { desc = "Git stash push" })
@@ -127,6 +127,7 @@ vim.keymap.set(
 -- yank a shareable github url for the current file + line to clipboard register
 vim.keymap.set("n", "<leader>gu", function()
     local url = locals.github_base_url
+        .. "main/"
         .. vim.fn.expand("%:.")
         .. "#L"
         .. vim.fn.line(".")

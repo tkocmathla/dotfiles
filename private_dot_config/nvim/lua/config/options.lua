@@ -26,6 +26,9 @@ opt.autoindent = true
 -- Don't insert the current comment leader when inserting a new line (:h fo-table)
 opt.formatoptions:remove { "o" }
 
+-- TODO document
+opt.completeopt = { "menu", "menuone", "noinsert", "noselect", "popup" }
+
 -- Don't show (partial) command in the last line of the screen
 opt.showcmd = false
 -- List mode shows visible characters for whitespace, configured by opt.listchars
