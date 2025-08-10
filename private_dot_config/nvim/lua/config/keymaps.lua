@@ -4,6 +4,14 @@
 local wk = require("which-key")
 local locals = require("config.locals")
 
+-- Move line up/down
+vim.keymap.set("n", "<A-j>", ":m .+1<cr>==", { desc = "Move line down" })
+vim.keymap.set("n", "<A-k>", ":m .-2<cr>==", { desc = "Move line up" })
+
+-- Move selection up/down
+vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
+vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
+
 -- Nvim
 vim.keymap.set("n", "<leader>C", ":NvimTreeOpen ~/.config/nvim/lua<cr>", { desc = "Jump to config" })
 vim.keymap.set("n", "<leader>H", ":noh<cr>", { desc = "Clear highlights" })
@@ -11,6 +19,9 @@ vim.keymap.set("t", "<esc><esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" }
 
 vim.keymap.set("n", "<leader>yf", ":let @+ = expand('%')<cr>", { desc = "Copy relative path to current file" })
 vim.keymap.set("n", "<leader>yF", ":let @+ = expand('%:p')<cr>", { desc = "Copy absolute path to current file" })
+
+-- Files
+vim.keymap.set("n", "<leader><space>", LazyVim.pick("files", { root = false }), { desc = "Find Files (cwd)" })
 
 -- NvimTree
 vim.keymap.set("n", "<leader>E", ":NvimTreeToggle<cr>", { desc = "Toggle file explorer" })
