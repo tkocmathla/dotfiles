@@ -1,11 +1,14 @@
 local wezterm = require 'wezterm'
-local config = wezterm.config_builder()
 local act = wezterm.action
+local mux = wezterm.mux
 
+local config = wezterm.config_builder()
+
+config.font_size = 14
 config.color_scheme = 'Catppuccin Frappe'
 config.hide_tab_bar_if_only_one_tab = true
-config.window_background_opacity = 0.95
 config.scrollback_lines = 10000
+config.warn_about_missing_glyphs = false
 
 config.leader = { key = ' ', mods = 'CTRL', timeout_milliseconds = 1000 }
 config.keys = {
