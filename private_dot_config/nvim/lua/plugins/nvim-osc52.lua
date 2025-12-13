@@ -8,7 +8,7 @@ return {
         end
 
         local function paste()
-            return { vim.fn.split(vim.fn.getreg(''), '\n'), vim.fn.getregtype('') }
+            return { vim.fn.split(vim.fn.getreg(''), '\n', true), vim.fn.getregtype('') }
         end
 
         vim.g.clipboard = {
