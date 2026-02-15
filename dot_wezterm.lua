@@ -25,10 +25,10 @@ config.keys = {
   -- Pane selection
   { key = 'a', mods = 'LEADER', action = act.PaneSelect },
   { key = 'o', mods = 'LEADER', action = act.RotatePanes 'Clockwise' },
-  { key = 'h', mods = 'LEADER', action = act.ActivatePaneDirection 'Left' },
+  { key = 'h', mods = 'LEADER', action = act.ActivatePaneDirection 'Prev' },
   { key = 'j', mods = 'LEADER', action = act.ActivatePaneDirection 'Down' },
   { key = 'k', mods = 'LEADER', action = act.ActivatePaneDirection 'Up' },
-  { key = 'l', mods = 'LEADER', action = act.ActivatePaneDirection 'Right' },
+  { key = 'l', mods = 'LEADER', action = act.ActivatePaneDirection 'Next' },
 
   -- Pane resizing
   { key = 'h', mods = 'CTRL|SHIFT|ALT', action = act.AdjustPaneSize { 'Left', 5 }},
@@ -41,7 +41,7 @@ config.keys = {
   { key = ']', mods = 'LEADER', action = act.MoveTabRelative(1) },
 
   -- Interactively rename current tab
-  -- https://wezfurlong.org/wezterm/config/lua/keyassignment/PromptInputLine.html#example-of-interactively-renaming-the-current-tab
+  -- https://wezterm.org/config/lua/keyassignment/PromptInputLine.html#example-of-interactively-renaming-the-current-tab
   {
     key = 'n',
     mods = 'CTRL|SHIFT|ALT',

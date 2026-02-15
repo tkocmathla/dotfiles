@@ -120,3 +120,8 @@ alias grep='rg'
 alias python='python3'
 alias vi='nvim'
 alias vim='nvim'
+
+export FZF_CTRL_T_COMMAND='fdfind --type f --hidden --follow --exclude .git --exclude bazel-bin --exclude bazel-out --exclude bazel-testlogs .'
+
+# Disable mypy cache.
+export MYPY_CACHE_DIR=/dev/null
