@@ -4,7 +4,10 @@ local locals = require("config.locals")
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("UserLspConfig", {}),
     callback = function(ev)
-        -- Enable completion triggered by <c-x><c-o>
+        -- Enable inlay hints.
+        vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+
+        -- Enable completion triggered by <c-x><c-o>.
         vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 
         -- Buffer local mappings.
@@ -24,8 +27,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 return {
   "neovim/nvim-lspconfig",
   config = function()
-    require("lspconfig").gopls.setup{ cmd = {"gopls"} }
-    require("lspconfig").pylsp.setup{
+    local util = require("lspconfig.util")
+
+    vim.lsp.config("gopls", { cmd = { "gopls" } })
+    vim.lsp.enable("gopls")
+
+    vim.lsp.config("pylsp", {
       settings = {
         pylsp = {
           plugins = {
@@ -36,20 +43,21 @@ return {
           }
         }
       }
-    }
-    require("lspconfig").clangd.setup{
+    })
+    vim.lsp.enable("pylsp")
+
+    -- Global clangd settings are in ~/.config/clangd/config.yaml.
+    vim.lsp.config("clangd", {
       cmd = {
-        "clangd",
-        "-j", "8",
+        locals.clangd_cmd,
+        "-j", "4",
         "--log=info",
-        "--background-index",
-        "--clang-tidy",
+        "--compile-commands-dir=" .. locals.repo_root,
         "--completion-style=detailed",
-        -- Clangd queries the compiler for its system include paths, but only if
-        -- the compiler executable is explicitly named--using a fully-qualified
-        -- path--in this option.
-        "--query-driver=" .. locals.repo_root .. "/external/toolchains_llvm~~llvm~llvm_toolchain/bin/cc_wrapper.sh",
+        "--background-index",
+        "--query-driver=" .. locals.clangd_query_driver,
       },
-    }
+    })
+    vim.lsp.enable("clangd")
   end,
 }

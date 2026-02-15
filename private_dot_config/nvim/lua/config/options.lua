@@ -1,11 +1,4 @@
--- Options are automatically loaded before lazy.nvim startup
--- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
--- Add any additional options here
 local locals = require("config.locals")
-
--- Disable LazyVim autoformat
-vim.g.autoformat = false
-
 local opt = vim.opt
 
 -- Set default shell to zsh
@@ -15,6 +8,20 @@ opt.shell = "zsh"
 opt.mouse = ""
 opt.updatetime = 1000
 
+-- Use the system clipboard unless in an SSH session
+opt.clipboard = vim.env.SSH_CONNECTION and "" or "unnamedplus"
+
+-- Line numbers
+opt.number = true
+opt.relativenumber = true
+opt.signcolumn = "yes"
+opt.numberwidth = 5
+opt.cursorline = true
+
+-- Enable syntax-based code folding
+opt.foldmethod = "syntax"
+opt.foldlevelstart = 99
+
 -- Number of spaces that a tab in the file counts for
 opt.tabstop = 4
 -- Number of spaces to use for each step of indent
@@ -23,8 +30,6 @@ opt.shiftwidth = 4
 opt.expandtab = true
 -- Copy indent from current line when starting a new line
 opt.autoindent = true
--- Don't insert the current comment leader when inserting a new line (:h fo-table)
-opt.formatoptions:remove { "o" }
 
 -- TODO document
 opt.completeopt = { "menu", "menuone", "noinsert", "noselect", "popup" }

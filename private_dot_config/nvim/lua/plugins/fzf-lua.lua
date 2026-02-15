@@ -1,8 +1,50 @@
 return {
   "ibhagwan/fzf-lua",
-  -- optional for icon support
   dependencies = { "nvim-tree/nvim-web-devicons" },
-  -- or if using mini.icons/mini.nvim
-  -- dependencies = { "nvim-mini/mini.icons" },
-  opts = {}
+  keys = {
+    {
+      "<leader><space>",
+      function()
+        require("fzf-lua").files({ cwd = vim.loop.cwd() })
+      end,
+      desc = "Find files (cwd)",
+    },
+    {
+      "<leader>ff",
+      function()
+        local fzf = require("fzf-lua")
+        local ok, git_root = pcall(fzf.path.git_root, { throw = false })
+        fzf.files({ cwd = ok and git_root or vim.loop.cwd() })
+      end,
+      desc = "Find files (repo root or cwd)",
+    },
+    { "<leader>fb", function() require("fzf-lua").buffers() end, desc = "Buffers" },
+    { "<leader>,", function() require("fzf-lua").buffers() end, desc = "Buffers" },
+    { "<leader>fr", function() require("fzf-lua").oldfiles() end, desc = "Recent files" },
+    { "<leader>fg", function() require("fzf-lua").live_grep() end, desc = "Live grep" },
+    { "<leader>fw", function() require("fzf-lua").grep_cword() end, desc = "Grep word under cursor" },
+    {
+      "<leader>fW",
+      function()
+        require("fzf-lua").grep_visual()
+      end,
+      mode = { "v", "n" },
+      desc = "Grep visual selection",
+    },
+    { "<leader>gf", function() require("fzf-lua").git_files() end, desc = "Git files" },
+    { "<leader>gb", function() require("fzf-lua").git_branches() end, desc = "Git branches" },
+    { "<leader>g/", function() require("fzf-lua").git_grep() end, desc = "Git grep" },
+    { "<leader>gC", function() require("fzf-lua").git_commits() end, desc = "Git commits" },
+    { "<leader>gc", function() require("fzf-lua").git_bcommits() end, desc = "Git commits (buffer)" },
+  },
+  opts = function()
+    local actions = require("fzf-lua.actions")
+    return {
+      defaults = {
+        actions = {
+          ["ctrl-x"] = actions.file_split,
+        },
+      },
+    }
+  end,
 }

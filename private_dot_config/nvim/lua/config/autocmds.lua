@@ -1,61 +1,33 @@
--- Autocmds are automatically loaded on the VeryLazy event
--- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
--- Add any additional autocmds here
 local locals = require("config.locals")
 
--- MLIR: Set filetype based on extension
+local aug = vim.api.nvim_create_augroup("config_autocmds", { clear = true })
+
+-- Don't continue comments on new lines
+vim.api.nvim_create_autocmd("FileType", {
+  group = aug,
+  pattern = "*",
+  callback = function()
+    vim.opt_local.formatoptions:remove({ "o" })
+  end,
+})
+
+-- Filetype detection for MLIR and generated C++
 vim.filetype.add({
   extension = {
-    mlir = 'mlir',
+    mlir = "mlir",
   },
-})
-
--- MLIR: Map TableGen'erated C++ files to the cpp file type
-vim.filetype.add({
   pattern = {
-    ['.*[.]h[.]inc'] = 'cpp',
-    ['.*[.]cpp[.]inc'] = 'cpp',
+    [".*[.]h[.]inc"] = "cpp",
+    [".*[.]cpp[.]inc"] = "cpp",
   },
 })
 
--- C++: Format code on save
-vim.api.nvim_create_autocmd('BufWritePre', {
-    pattern = '*.cpp',
-    callback = function()
-        vim.lsp.buf.format()
-    end,
-})
-
--- C++: Show vertical bar for line wrap
-vim.api.nvim_create_autocmd('BufEnter', {
-    pattern = '*.cpp',
-    callback = function()
-        vim.opt.colorcolumn = "100"
-    end,
-})
-
--- Python: Show vertical bar for line wrap
-vim.api.nvim_create_autocmd('BufEnter', {
-    pattern = '*.py',
-    callback = function()
-        vim.opt.colorcolumn = "90"
-    end,
-})
-
--- Go: Don't show visible tabs
-vim.api.nvim_create_autocmd('BufEnter', {
-    pattern = '*.go',
-    callback = function()
-        vim.opt.listchars:append({ tab = "  " })
-    end,
-})
-
--- Go: Format code and imports on save
-vim.api.nvim_create_autocmd('BufWritePre', {
-    pattern = '*.go',
-    callback = function()
-       require('go.format').gofmt()
-    end,
+-- Reapply buffer-defined colorcolumn preferences (set in ftplugin/*)
+vim.api.nvim_create_autocmd({ "BufEnter", "FileType" }, {
+  group = aug,
+  callback = function()
+    vim.opt_local.colorcolumn = vim.b.colorcolumn or ""
+  end,
 })
 
 locals.autocmds()
