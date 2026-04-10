@@ -1,5 +1,4 @@
 local locals = require("config.locals")
-
 local aug = vim.api.nvim_create_augroup("config_autocmds", { clear = true })
 
 -- Don't continue comments on new lines
@@ -30,4 +29,6 @@ vim.api.nvim_create_autocmd({ "BufEnter", "FileType" }, {
   end,
 })
 
-locals.autocmds()
+if locals.autocmds then
+  locals.autocmds()
+end

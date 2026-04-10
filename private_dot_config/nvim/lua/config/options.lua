@@ -58,4 +58,6 @@ opt.incsearch = true
 -- Override ignorecase if the search pattern contains uppercase characters
 opt.smartcase = true
 
-locals.options()
+if locals.options then
+  locals.options()
+end

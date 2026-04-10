@@ -13,6 +13,7 @@ return {
         "go",
         "python",
         "lua",
+        "yaml",
         "vim",
         "vimdoc",
         "query",

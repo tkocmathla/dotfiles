@@ -1,3 +1,5 @@
+local locals = require("config.locals")
+
 vim.keymap.set("n", "<leader>H", ":noh<cr>", { desc = "Clear highlights" })
 
 vim.keymap.set("n", "<leader>yf", ":let @+ = expand('%')<cr>", { desc = "Copy relative path to current file" })
@@ -25,4 +27,17 @@ vim.keymap.set("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close tab" 
 
 -- Terminal
 vim.keymap.set("t", "<leader><esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
+vim.keymap.set("n", "<leader>tt", function()
+  Snacks.terminal.toggle(nil, {
+    win = {
+      position = "float",
+      width = 0.5,
+      height = 0.7,
+      border = "rounded",
+    },
+  })
+end, { desc = "Toggle floating terminal" })
 
+if locals.keymaps then
+  locals.keymaps()
+end
